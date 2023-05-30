@@ -1,4 +1,4 @@
-import {addTaskAC, removeTaskAC, setTasksAC, tasksReducer, TasksStateType, updateTaskAC} from "./tasks-reducer";
+import {addTaskTC, fetchTasksTC, removeTaskTC, tasksReducer, TasksStateType, updateTaskTC} from "./tasks-reducer";
 import {TaskType} from "../../api/todolists-api";
 
 
@@ -66,8 +66,7 @@ test('set tasks', () => {
       },
     ]
 
-
-  const action = setTasksAC({tasks: tasks1, todolistId: '1'})
+  const action = fetchTasksTC.fulfilled({tasks: tasks1, todolistId: '1'}, '', '1')
   const copyState = tasksReducer(tasks, action)
   console.log(copyState)
   expect(copyState['1'][0].title).toBe('Milk')
@@ -86,7 +85,7 @@ test('add task', () => {
     deadline: '',
     addedDate: "2023-01-23T16:13:33.027"
   }
-  const action = addTaskAC({task})
+  const action = addTaskTC.fulfilled({task}, '', {title: task.title, todolistId: task.todoListId})
   const copyState = tasksReducer(tasks, action)
   console.log(copyState)
   expect(copyState['1'].length).toBe(3)
@@ -94,7 +93,7 @@ test('add task', () => {
 })
 
 test('remove task', () => {
-  const action = removeTaskAC({taskId: '1', todolistId: '1'})
+  const action = removeTaskTC.fulfilled({taskId: '1', todolistId: '1'}, '', {taskId: '1', todolistId: '1'})
   const copyState = tasksReducer(tasks, action)
   console.log(copyState)
   expect(copyState['1'].length).toBe(1)
@@ -105,7 +104,7 @@ test('update task', () => {
     status: 1,
     title: '123'
   }
-  const action = updateTaskAC({taskId: '1', todolistId: '1', model})
+  const action = updateTaskTC.fulfilled({taskId: '1', todolistId: '1', model}, '', {taskId: '1', domainModel: model, todolistId: '1' })
   const copyState = tasksReducer(tasks, action)
   console.log(copyState)
   expect(copyState['1'][0].status).toBe(1)
